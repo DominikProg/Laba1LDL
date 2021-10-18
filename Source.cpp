@@ -8,10 +8,14 @@ double** GetL(double[n][n], double[n][n]);
 void LDL(double[n][n], double [n]);
 int main()
 {
-	double A[n][n] = { 14, 2, 2,
-					   2, 11, 5,
-					   2, 5, 11 };
-	double b[n] = { -16, -1, -19 };
+	double t1 = 3;
+	double t2 = 2;
+	double t3 = 1;
+	double A[n][n]=   { 2*t1 + 4*t2,   2*(t1 - t2),   2*(t1 - t2),
+					     2*(t1-t2),     2*t1+t2+3*t3,  2*t1+t2-3*t3,
+					     2 * (t1 - t2), 2*t1+t2-3*t3,  2*t1+t2+3*t3 };
+	double b[n] = { -4 * t1 - 2 * t2, -4 * t1 + t2 + 9 * t3, -4 * t1 + t2 - 9 * t3 };
+
 	LDL(A, b);
 }
 double** GetL(double A[n][n], double D[n][n])
