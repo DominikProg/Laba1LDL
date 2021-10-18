@@ -5,18 +5,21 @@ double* Gety(double[n], double**);
 double* Getz(double[n], double[n][n]);
 double* Getx(double[n], double**);
 double** GetL(double[n][n], double[n][n]);
-void LDL(double[n][n], double [n]);
+void Proiz(double matrix[n][n], double masx[n], double res[n]);
+void Minus(double res[n], double svobod[n]);
+void Vnev(double matrix[n][n], double masx[n], double svobod[n]);
+double* LDL(double[n][n], double [n]);
 int main()
 {
-	double t1 = 3;
-	double t2 = 2;
-	double t3 = 1;
+	double t1 = 10;
+	double t2 = 1000;
+	double t3 = 1000000;
 	double A[n][n]=   { 2*t1 + 4*t2,   2*(t1 - t2),   2*(t1 - t2),
 					     2*(t1-t2),     2*t1+t2+3*t3,  2*t1+t2-3*t3,
 					     2 * (t1 - t2), 2*t1+t2-3*t3,  2*t1+t2+3*t3 };
 	double b[n] = { -4 * t1 - 2 * t2, -4 * t1 + t2 + 9 * t3, -4 * t1 + t2 - 9 * t3 };
-
-	LDL(A, b);
+	double* x=LDL(A, b);
+	Vnev(A, x, b);
 }
 double** GetL(double A[n][n], double D[n][n])
 {
@@ -61,7 +64,7 @@ double** GetL(double A[n][n], double D[n][n])
 	return L;
 }
 
-void LDL(double A[n][n], double b[n])
+double* LDL(double A[n][n], double b[n])
 {
 	double D[n][n] = { 0, 0, 0,
 					  0, 0, 0,
@@ -74,6 +77,8 @@ void LDL(double A[n][n], double b[n])
 	{
 		cout << x[i] << ' ';
 	}
+	cout << endl;
+	return x;
 }
 double* Gety(double b[n], double** L)
 {
@@ -113,4 +118,31 @@ double* Getx(double z[n], double** L)
 		x[i] = z[i] - sum;
 	}
 	return x;
+}
+
+void Proiz(double matrix[n][n], double masx[n], double res[n])
+{
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			res[i] += matrix[i][j] * masx[j];
+}
+void Minus(double res[n], double svobod[n])
+{
+	for (int i = 0; i < n; i++)
+		res[i] -= svobod[i];
+}
+
+void Vnev(double matrix[n][n], double masx[n], double svobod[n])
+{
+	double res[n + 1] = { 0 };
+	Proiz(matrix, masx, res);
+	Minus(res, svobod);
+	cout << "Vektor nevyazki: ";
+	for (int i = 0; i < n; i++)
+		cout << res[i] << ' ';
+	cout << endl;
+	double max = 0;
+	for (int i = 0; i < n; i++)
+		if (max < res[i]) max = res[i];
+	cout << "Norma: " << max << endl;
 }
